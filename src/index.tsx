@@ -1,39 +1,67 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Toggle from './components/toggle'
+import Clock from './components/Clock';
 
-class Clock extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {date: new Date()};
+
+class Time extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {isToggleOn: false};
+      this.handleClickon = this.handleClickon.bind(this);
+      this.handleClickoff = this.handleClickoff.bind(this);
+    }
+  
+    handleClickon() {
+      this.setState({
+        isToggleOn: true
+      });
+    }
+
+    handleClickoff(){
+      this.setState({
+        isToggleOn: false
+      });
+    }
+  
+    render() {
+      const isToggleOn =this.state.isToggleOn;
+      let button;
+      if(isToggleOn){
+        button =<ButtonOff onClick={this.handleClickoff} />;
+        return (
+          <div>
+          <h1>現在時刻を表示します。</h1>
+          {button}
+          <Clock/>
+          </div>
+        );
+      }else{
+        button =<ButtonOn onClick={this.handleClickon}/>;
+        return (
+          <div>
+          <h1>現在時刻を表示します。</h1>
+          {button}
+          </div>
+        );
+      }
+    }
+  }
+
+  function ButtonOn(props){
+    return(
+      <button onClick={props.onClick}>
+        表示
+      </button>
+    );
+  }
+
+  function ButtonOff(props){
+    return(
+      <button onClick={props.onClick}>
+        閉じる
+      </button>
+    )
   }
   
-  componentDidMount(){
-    this.timerID = setInterval(() => this.tick(),1000);
-  }
-
-  componentWillUnmount(){
-    clearInterval(this.timerID);
-  }
-
-  tick(){
-    this.setState(
-      {date: new Date()}
-    );
-  }
-
-  render(){
-    return (
-    <>
-      <Toggle />
-      <div>
-        <h2>現在時刻 :  {this.state.date.toLocaleTimeString()}</h2>
-      </div>
-    </>
-    );
-  }
-}
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Clock />);
-
+root.render(<Time />);
